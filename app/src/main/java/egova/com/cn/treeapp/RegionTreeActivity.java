@@ -18,6 +18,11 @@ public class RegionTreeActivity extends BaseTreeActivity<RegionBean> {
 
     @Override
     protected List<RegionBean> getDataList() {
+        try {
+            Thread.sleep(2000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
         return Mock.getData();
     }
 
@@ -56,6 +61,10 @@ public class RegionTreeActivity extends BaseTreeActivity<RegionBean> {
         return true;
     }
 
+    @Override
+    protected boolean isShowProgress() {
+        return true;
+    }
 }
 
 

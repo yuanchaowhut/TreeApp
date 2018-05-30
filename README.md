@@ -143,6 +143,7 @@ this library support a unlimited tree structure，but there are some requirement
     | 方法   | 是否抽象  |  作用  |
     | :----:| :-----:  | :----: |
     | isNeedThread()   |否      |决定是否需要开启线程，默认为false(表不开启)，联网获取数据的场景必须开启线程|
+    | isShowProgress()   |否      |决定是否显示进度条，默认为false(表不显示)，联网获取数据的场景建议显示进度条，以获得更好的用户体验|
     | getDataList()   |是      |获取树形结构数据的方法，如果isNeedThread()返回true，则本方法在子线程执行|
     | getClickCallBack() |是      |用于实际处理每个item的点击事件，建议参考本app中的使用方法|
 
