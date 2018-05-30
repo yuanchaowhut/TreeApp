@@ -4,10 +4,10 @@ this library support a unlimited tree structure，but there are some requirement
 # 效果展示
 ![效果展示](show.gif)
 
-# 控件使用示例
+# 使用示例
 1. 引入依赖
 
-    在项目工程的build.gradle添加如下代码：
+    在项目根目录的build.gradle添加如下代码：
 
         allprojects {
             repositories {
@@ -17,7 +17,7 @@ this library support a unlimited tree structure，but there are some requirement
         }
     }
 
-    在需要使用本控件的module的build.gradle添加如下代码：
+    在app的build.gradle添加如下代码：
 
         dependencies {
     	            compile 'com.github.yuanchaowhut:TreeApp:v1.0'
