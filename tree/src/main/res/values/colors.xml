@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="font_blue">#3A90F6</color>
+    <color name="list_item_selected_bg">#FAFAFA</color>
+    <color name="white">#FFFFFF</color>
+    <color name="black">#FF000000</color>
+    <color name="transparent">#00000000</color>
+    <color name="hint">#ABAFB3</color>
+</resources>

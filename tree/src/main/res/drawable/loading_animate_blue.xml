@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="utf-8"?>
+<animation-list xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:duration="100">
+        <rotate
+            android:drawable="@drawable/loading_blue"
+            android:fromDegrees="36"
+            android:pivotX="50%"
+            android:pivotY="50%">
+        </rotate>
+    </item>
+    <item android:duration="100">
+        <rotate
+            android:drawable="@drawable/loading_blue"
+            android:fromDegrees="72"
+            android:pivotX="50%"
+            android:pivotY="50%">
+        </rotate>
+    </item>
+    <item android:duration="100">
+        <rotate
+            android:drawable="@drawable/loading_blue"
+            android:fromDegrees="108"
+            android:pivotX="50%"
+            android:pivotY="50%">
+        </rotate>
+    </item>
+    <item android:duration="100">
+        <rotate
+            android:drawable="@drawable/loading_blue"
+            android:fromDegrees="144"
+            android:pivotX="50%"
+            android:pivotY="50%">
+
+        </rotate>
+    </item>
+    <item android:duration="100">
+        <rotate
+            android:drawable="@drawable/loading_blue"
+            android:fromDegrees="180"
+            android:pivotX="50%"
+            android:pivotY="50%">
+        </rotate>
+    </item>
+    <item android:duration="100">
+        <rotate
+            android:drawable="@drawable/loading_blue"
+            android:fromDegrees="216"
+            android:pivotX="50%"
+            android:pivotY="50%">
+
+        </rotate>
+    </item>
+    <item android:duration="100">
+        <rotate
+            android:drawable="@drawable/loading_blue"
+            android:fromDegrees="252"
+            android:pivotX="50%"
+            android:pivotY="50%">
+        </rotate>
+    </item>
+    <item android:duration="100">
+        <rotate
+            android:drawable="@drawable/loading_blue"
+            android:fromDegrees="288"
+            android:pivotX="50%"
+            android:pivotY="50%">
+
+        </rotate>
+    </item>
+    <item android:duration="100">
+        <rotate
+            android:drawable="@drawable/loading_blue"
+            android:fromDegrees="324"
+            android:pivotX="50%"
+            android:pivotY="50%">
+        </rotate>
+    </item>
+    <item android:duration="100">
+        <rotate
+            android:drawable="@drawable/loading_blue"
+            android:fromDegrees="360"
+            android:pivotX="50%"
+            android:pivotY="50%">
+        </rotate>
+    </item>
+
+</animation-list>
