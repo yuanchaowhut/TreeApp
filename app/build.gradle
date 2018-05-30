@@ -25,5 +25,5 @@ dependencies {
     androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.2'
 
 //    implementation project(':tree')
-    implementation 'com.github.yuanchaowhut:TreeApp:v1.0'
+    implementation 'com.github.yuanchaowhut:TreeApp:v1.1'
 }

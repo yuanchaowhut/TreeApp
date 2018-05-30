@@ -20,7 +20,7 @@ this library support a unlimited tree structure，but there are some requirement
     在app的build.gradle添加如下代码：
 
         dependencies {
-    	            compile 'com.github.yuanchaowhut:TreeApp:v1.0'
+    	            compile 'com.github.yuanchaowhut:TreeApp:v1.1'
     	}
 
 2. 关于数据结构
