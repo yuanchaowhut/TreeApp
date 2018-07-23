@@ -40,6 +40,11 @@ public class Node<T> implements Serializable{
 
     private T t;
 
+    /**
+     * 是否被选中
+     */
+    private boolean choosed;
+
     public Node() {
     }
 
@@ -165,4 +170,11 @@ public class Node<T> implements Serializable{
         }
     }
 
+    public boolean isChoosed() {
+        return choosed;
+    }
+
+    public void setChoosed(boolean choosed) {
+        this.choosed = choosed;
+    }
 }

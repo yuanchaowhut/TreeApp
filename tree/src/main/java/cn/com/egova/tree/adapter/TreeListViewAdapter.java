@@ -9,6 +9,7 @@ import android.widget.AdapterView.OnItemClickListener;
 import android.widget.BaseAdapter;
 import android.widget.ListView;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import cn.com.egova.tree.TreeHelper;
@@ -22,8 +23,11 @@ public abstract class TreeListViewAdapter<T> extends BaseAdapter {
     protected LayoutInflater mInflater;
     //存储所有的Node
     protected List<Node> mAllNodes;
+    //是否支持多选
+    protected boolean isMultiChoice;
     //点击的回调接口
     private OnTreeNodeClickListener onTreeNodeClickListener;
+    private OnTreeNodeMultiChoiceListener onTreeNodeMultiChoiceListener;
 
 
     /**
@@ -34,9 +38,10 @@ public abstract class TreeListViewAdapter<T> extends BaseAdapter {
      * @throws IllegalArgumentException
      * @throws IllegalAccessException
      */
-    public TreeListViewAdapter(ListView mTree, Context context, List<T> data, int defaultExpandLevel) throws IllegalArgumentException,
+    public TreeListViewAdapter(ListView mTree, Context context, List<T> data, int defaultExpandLevel, boolean isMultiChoice) throws IllegalArgumentException,
             IllegalAccessException {
         this.mContext = context;
+        this.isMultiChoice = isMultiChoice;
         this.mInflater = LayoutInflater.from(context);
         //对所有的Node进行排序
         this.mAllNodes = TreeHelper.getSortedNodes(data, defaultExpandLevel);
@@ -115,6 +120,81 @@ public abstract class TreeListViewAdapter<T> extends BaseAdapter {
         this.onTreeNodeClickListener = onTreeNodeClickListener;
     }
 
+    public void setOnTreeNodeMultiChoiceListener(OnTreeNodeMultiChoiceListener onTreeNodeMultiChoiceListener) {
+        this.onTreeNodeMultiChoiceListener = onTreeNodeMultiChoiceListener;
+    }
+
+
+    /**
+     * 1.处理自身的选中状态
+     *
+     * @param node
+     * @param isChecked
+     */
+    protected void handleSelfCheckState(Node node, boolean isChecked) {
+        node.setChoosed(isChecked);
+    }
+
+    /**
+     * 2.处理父节点的选中状态
+     *
+     * @param node
+     * @param isChecked
+     */
+    protected void handleParentCheckState(Node node, boolean isChecked) {
+        if (node.getParent() != null) {
+            List<Node> nodes = node.getParent().getChildren();
+            boolean hasUnChoosed = false;
+            for (Node n : nodes) {
+                if (!n.isChoosed()) {
+                    hasUnChoosed = true;
+                    break;
+                }
+            }
+            node.getParent().setChoosed(!hasUnChoosed);
+
+            //递归.
+            handleParentCheckState(node.getParent(), node.getParent().isChoosed());
+        }
+    }
+
+    /**
+     * 3.处理子节点的选中状态
+     *
+     * @param node
+     * @param isChecked
+     */
+    protected void handleChildrenCheckState(Node node, boolean isChecked) {
+        List<Node> children = node.getChildren();
+        if (children != null && children.size() > 0) {
+            for (Node n : children) {
+                n.setChoosed(isChecked);
+
+                //递归
+                handleChildrenCheckState(n,n.isChoosed());
+            }
+        }
+    }
+
+    /**
+     * 4.处理多选事件
+     *
+     * @param node
+     * @param isChecked
+     */
+    protected void handleMultiChoiceEvent(Node node, boolean isChecked) {
+        List<Node> selectedNodes = new ArrayList<Node>();
+        for (Node n : mAllNodes) {
+            if (n.isChoosed()) {
+                selectedNodes.add(n);
+            }
+        }
+        if (onTreeNodeMultiChoiceListener != null) {
+            onTreeNodeMultiChoiceListener.onMultiChoice(selectedNodes);
+        }
+    }
+
+
     /**
      * 点击动作回调的接口
      */
@@ -124,4 +204,10 @@ public abstract class TreeListViewAdapter<T> extends BaseAdapter {
         void onLongClick(Node node, int position);
     }
 
+    /**
+     * 点击动作回调的接口
+     */
+    public interface OnTreeNodeMultiChoiceListener {
+        void onMultiChoice(List<Node> nodes);
+    }
 }

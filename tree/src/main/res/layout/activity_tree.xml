@@ -11,7 +11,7 @@
         style="@style/pro_withtext"
         android:visibility="gone" />
 
-    <FrameLayout
+    <RelativeLayout
         android:id="@+id/ll_btn_container"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -21,26 +21,38 @@
             android:id="@+id/btn_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="left"
-            android:layout_marginRight="15dp"
+            android:layout_alignParentLeft="true"
             android:background="@null"
-            android:padding="7dp"
             android:text="请选择"
             android:textColor="@color/font_blue"
             android:textSize="16sp" />
 
-        <Button
-            android:id="@+id/btn_cancel"
+        <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="right"
-            android:layout_marginRight="15dp"
-            android:background="@null"
-            android:padding="7dp"
-            android:text="取消"
-            android:textColor="@color/font_blue"
-            android:textSize="16sp" />
-    </FrameLayout>
+            android:layout_alignParentRight="true"
+            android:orientation="horizontal">
+
+            <Button
+                android:id="@+id/btn_cancel"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@null"
+                android:text="取消"
+                android:textColor="@color/font_blue"
+                android:textSize="16sp" />
+
+            <Button
+                android:id="@+id/btn_ok"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@null"
+                android:text="确定"
+                android:textColor="@color/font_blue"
+                android:textSize="16sp"
+                android:visibility="gone" />
+        </LinearLayout>
+    </RelativeLayout>
 
     <ListView
         android:id="@+id/lst_tree"

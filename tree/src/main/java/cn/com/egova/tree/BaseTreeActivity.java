@@ -6,8 +6,8 @@ import android.os.Handler;
 import android.os.Message;
 import android.view.View;
 import android.widget.Button;
-import android.widget.FrameLayout;
 import android.widget.ListView;
+import android.widget.RelativeLayout;
 import android.widget.Toast;
 
 import java.util.List;
@@ -23,11 +23,13 @@ public abstract class BaseTreeActivity<T> extends Activity implements View.OnCli
     public static final int GET_DATA_FAILED = 0;
     public static final int GET_DATA_SUCCESS = 1;
     protected List<T> mData;
-    protected FrameLayout llBtnContainer;
+    protected RelativeLayout btnContainer;
+    protected Button btnOK;
     protected Button btnCancel;
     protected ListView mTree;
     protected ProgressBarWithText pbLoading;
     protected TreeListViewAdapter mAdapter;
+    protected List<Node> selectedNodes;
 
     private Handler mHandler = new Handler() {
         @Override
@@ -58,11 +60,13 @@ public abstract class BaseTreeActivity<T> extends Activity implements View.OnCli
     }
 
     protected void initView() {
-        llBtnContainer = (FrameLayout) findViewById(R.id.ll_btn_container);
+        btnContainer = (RelativeLayout) findViewById(R.id.ll_btn_container);
+        btnOK = (Button) findViewById(R.id.btn_ok);
         btnCancel = (Button) findViewById(R.id.btn_cancel);
         mTree = (ListView) findViewById(R.id.lst_tree);
         pbLoading = (ProgressBarWithText) findViewById(R.id.pb_loading);
 
+        btnOK.setOnClickListener(this);
         btnCancel.setOnClickListener(this);
     }
 
@@ -99,32 +103,42 @@ public abstract class BaseTreeActivity<T> extends Activity implements View.OnCli
 
     protected void showTree() {
         try {
-            llBtnContainer.setVisibility(View.VISIBLE);  //显示顶部2个按钮(请选择、取消)
-            mAdapter = new SimpleTreeAdapter<T>(mTree, this, mData, getDefaultExpandLevel());
-
-            //设置监听事件,本Activity并不实际处理，由实现类自行处理.
-            mAdapter.setOnTreeNodeClickListener(new TreeListViewAdapter.OnTreeNodeClickListener() {
-                @Override
-                public void onClick(Node node, int position) {
-                    ICallBack<Node> callBack = getClickCallBack();
-                    if (callBack != null) {
-                        callBack.onResult(ICallBack.TYPE_CLICK, node);
-                    }
-                }
-
-                @Override
-                public void onLongClick(Node node, int position) {
-                    ICallBack<Node> callBack = getClickCallBack();
-                    if (callBack != null) {
-                        callBack.onResult(ICallBack.TYPE_LONG_CLICK, node);
-                    }
-                }
-            });
-
+            btnContainer.setVisibility(View.VISIBLE);
+            mAdapter = new SimpleTreeAdapter<T>(mTree, this, mData, getDefaultExpandLevel(), isMultiChoice());
             mTree.setAdapter(mAdapter);
+
+            //多项选择情况下使用
+            if (isMultiChoice()) {
+                btnOK.setVisibility(View.VISIBLE);
+                mAdapter.setOnTreeNodeMultiChoiceListener(new TreeListViewAdapter.OnTreeNodeMultiChoiceListener() {
+                    @Override
+                    public void onMultiChoice(List<Node> nodes) {
+                        selectedNodes = nodes;
+                    }
+                });
+            } else {
+                btnOK.setVisibility(View.GONE);
+                mAdapter.setOnTreeNodeClickListener(new TreeListViewAdapter.OnTreeNodeClickListener() {
+                    @Override
+                    public void onClick(Node node, int position) {
+                        ICallBack<Node> callBack = getClickCallBack();
+                        if (callBack != null) {
+                            callBack.onResult(ICallBack.TYPE_CLICK, node);
+                        }
+                    }
+
+                    @Override
+                    public void onLongClick(Node node, int position) {
+                        ICallBack<Node> callBack = getClickCallBack();
+                        if (callBack != null) {
+                            callBack.onResult(ICallBack.TYPE_LONG_CLICK, node);
+                        }
+                    }
+                });
+            }
         } catch (IllegalAccessException e) {
             e.printStackTrace();
-            llBtnContainer.setVisibility(View.GONE);  //隐藏顶部2个按钮(请选择、取消)
+            btnContainer.setVisibility(View.GONE);  //隐藏顶部2个按钮(请选择、取消)
         }
     }
 
@@ -134,8 +148,6 @@ public abstract class BaseTreeActivity<T> extends Activity implements View.OnCli
         return 0;
     }
 
-    protected abstract ICallBack<Node> getClickCallBack();  //这个callBack用于实际处理点击事件包括长按事件
-
     protected boolean isNeedThread() {
         return false;
     }
@@ -144,12 +156,42 @@ public abstract class BaseTreeActivity<T> extends Activity implements View.OnCli
         return false;
     }
 
+    protected boolean isMultiChoice() {
+        return false;
+    }
+
+    /**
+     * 此callBack用于实际处理点击事件包括长按事件.如果使用到了OnTreeNodeClickListener，
+     * 则需重写本方法。
+     */
+    protected ICallBack<Node> getClickCallBack() {
+        return null;
+    }
+
+    /**
+     * 此callBack用于实际处理多项选择后的"点击"事件.如果使用到了OnTreeNodeMultiChoiceListener,
+     * 则需重写本方法.
+     *
+     * @return
+     */
+    protected ICallBack<List<Node>> getMultiChoiceCallback() {
+        return null;
+    }
+
     protected void showTip(String tip) {
         Toast.makeText(BaseTreeActivity.this, tip, Toast.LENGTH_SHORT).show();
     }
 
     @Override
     public void onClick(View v) {
-        finish();
+        int id = v.getId();
+        if (id == R.id.btn_ok) {
+            ICallBack<List<Node>> callBack = getMultiChoiceCallback();
+            if (callBack != null) {
+                callBack.onResult(ICallBack.STATUS_SUCCESS, selectedNodes);
+            }
+        } else if (id == R.id.btn_cancel) {
+            finish();
+        }
     }
 }

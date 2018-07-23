@@ -43,7 +43,7 @@ public class TreeHelper {
         List<Node> result = new ArrayList<Node>();
 
         for (Node node : nodes) {
-            // 如果为跟节点，或者上层目录为展开状态
+            // 如果为根节点，或者上层目录为展开状态
             if (node.isRoot() || node.isParentExpand()) {
                 setNodeIcon(node);
                 result.add(node);

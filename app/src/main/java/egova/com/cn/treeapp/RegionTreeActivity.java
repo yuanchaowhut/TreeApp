@@ -3,6 +3,7 @@ package egova.com.cn.treeapp;
 import android.content.Intent;
 import android.os.Bundle;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import cn.com.egova.tree.BaseTreeActivity;
@@ -34,10 +35,10 @@ public class RegionTreeActivity extends BaseTreeActivity<RegionBean> {
                 Intent intent = new Intent(RegionTreeActivity.this, MainActivity.class);
                 //注意:如果自定义的实体类RegionBean不愿意实现Serializable接口，则此处这些数据需要挨个putExtra进行传递.
                 //建议如非特殊情况，实现Serializable接口比较方便，直接传递对象即可。
-//                intent.putExtra(TreeConst.KEY_NODE_ID,resultObj.getId());
-//                intent.putExtra(TreeConst.KEY_NODE_ID,resultObj.getName());
-//                RegionBean regionBean = (RegionBean) resultObj.getT();
-//                intent.putExtra(TreeConst.KEY_REGION_TYPE,regionBean.getType());
+                intent.putExtra(TreeConst.KEY_NODE_ID, resultObj.getId());
+                intent.putExtra(TreeConst.KEY_NODE_ID, resultObj.getName());
+                RegionBean regionBean = (RegionBean) resultObj.getT();
+                intent.putExtra(TreeConst.KEY_REGION_TYPE, regionBean.getType());
 
                 intent.putExtra(TreeConst.KEY_NODE, resultObj);
                 if (obj == ICallBack.TYPE_CLICK) {                   //单击
@@ -56,6 +57,27 @@ public class RegionTreeActivity extends BaseTreeActivity<RegionBean> {
         };
     }
 
+
+    @Override
+    protected ICallBack<List<Node>> getMultiChoiceCallback() {
+        return new ICallBack<List<Node>>() {
+            @Override
+            public void onResult(int obj, List<Node> resultObj) {
+                ArrayList<String> nodeNames = new ArrayList<>();
+                if (resultObj != null) {
+                    for (Node node : resultObj) {
+                        nodeNames.add(node.getName());
+                    }
+                }
+
+                Intent intent = new Intent(RegionTreeActivity.this, MainActivity.class);
+                intent.putStringArrayListExtra(TreeConst.KEY_NODES, nodeNames);
+                setResult(TreeConst.RESULT_CODE_MULTI_CHOICE, intent);
+                finish();
+            }
+        };
+    }
+
     @Override
     protected boolean isNeedThread() {
         return true;
@@ -63,6 +85,11 @@ public class RegionTreeActivity extends BaseTreeActivity<RegionBean> {
 
     @Override
     protected boolean isShowProgress() {
+        return true;
+    }
+
+    @Override
+    protected boolean isMultiChoice() {
         return true;
     }
 }

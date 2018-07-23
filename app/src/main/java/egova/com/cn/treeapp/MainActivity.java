@@ -9,6 +9,8 @@ import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import java.util.List;
+
 import cn.com.egova.tree.bean.Node;
 
 public class MainActivity extends Activity implements View.OnClickListener {
@@ -61,6 +63,25 @@ public class MainActivity extends Activity implements View.OnClickListener {
             e.printStackTrace();
             llInfoContainer.setVisibility(View.GONE);
         }
+
+        try {
+            List<String> nodeNames = data.getStringArrayListExtra(TreeConst.KEY_NODES);
+            if (nodeNames == null || nodeNames.size() == 0) {
+                etRegion.setText("");
+                return;
+            }
+            StringBuilder sb = new StringBuilder();
+            for (String nodeName : nodeNames) {
+                sb.append(nodeName + ",");
+            }
+            String regions = sb.deleteCharAt(sb.length() - 1).toString();
+            etRegion.setText(regions);
+            etRegion.setSelection(regions.length());
+        } catch (Exception e) {
+            e.printStackTrace();
+            llInfoContainer.setVisibility(View.GONE);
+        }
+
     }
 
 
