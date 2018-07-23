@@ -2,7 +2,9 @@
 this library support a unlimited tree structure，but there are some requirements for data structure!
 
 # 效果展示
-![效果展示](show.gif)
+![效果展示](singleChoice.gif)
+
+![效果展示](multiChoice.gif)
 
 # 使用示例
 1. 引入依赖
@@ -145,7 +147,10 @@ this library support a unlimited tree structure，but there are some requirement
     | isNeedThread()   |否      |决定是否需要开启线程，默认为false(表不开启)，联网获取数据的场景必须开启线程|
     | isShowProgress()   |否      |决定是否显示进度条，默认为false(表不显示)，联网获取数据的场景建议显示进度条，以获得更好的用户体验|
     | getDataList()   |是      |获取树形结构数据的方法，如果isNeedThread()返回true，则本方法在子线程执行|
-    | getClickCallBack() |是      |用于实际处理每个item的点击事件，建议参考本app中的使用方法|
+    | getDefaultExpandLevel() |否      |默认展开的级别，默认值为0，表示从根节点开始展示|
+    | isMultiChoice() |否      |是否允许多选，默认不允许|
+    | getClickCallBack() |否      |用于实际处理每个item的点击事件，值得注意的是多选的时候本方法无用|
+    | getMultiChoiceCallback() |否      |用于实际处理多项选择事件，多选的时候可以得到所有选择的节点集合，值得注意的是单选的时候本方法无用|
 
 4. 总结回顾
    + 本项目是在鸿洋大神的[Android 打造任意层级树形控件](https://blog.csdn.net/lmj623565791/article/details/40212367)基础上做了一些扩展和封装，
@@ -156,7 +161,20 @@ this library support a unlimited tree structure，but there are some requirement
      实际需求，那么你可以自己写一个XXXAdapter去继承TreeListViewAdapter<T>，然后进行各种布局。
    + 自己创建的实体类是否实现Serializable接口，取决于你是否想在Activity中整体传递Node对象或者该实体对象，一般建议实现该接口，如果不实现，则在需要
      传递数据的地方先从对象身上取数据，然后使用诸如：putExtra之类的方法挨个进行存储。当然这在对象字段比较多的情况下是很不利的！
-
+   + 本控件支持多选，但默认是单选的。如果需要允许多选，则可重写BaseTreeActivity里的isMultiChoice、getMultiChoiceCallback等方法，需要注意的是，
+     单选的时候getMultiChoiceCallback()将失去作用，多选的时候getClickCallBack()将失去作用。
+   + 多选的情况下，每个item会显示一个复选框，但是复选框会抢占父容器的焦点，导致ListView的onItemClickListener事件异常，解决方法就是在xml布局文件中
+     将复选框的focusable属性设置为false，由于本例需要对CheckBox设置点击事件，故clickable属性得为true,这里默认就可以。
+     ```
+     <CheckBox
+             android:id="@+id/id_treenode_choose"
+             android:layout_width="wrap_content"
+             android:layout_height="wrap_content"
+             android:layout_centerVertical="true"
+             android:layout_toRightOf="@id/id_treenode_icon"
+             android:focusable="false"
+             android:visibility="gone"/>
+     ```
 
 # 缺陷及不足
 + 本项目对数据结构要求非常严格，要求父子节点必须通过id,pid进行关联，实际开发中可能后台接口返回的并非此种格式，因此需要后端人员配合；
