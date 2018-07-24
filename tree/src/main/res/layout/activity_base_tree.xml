@@ -12,7 +12,7 @@
         android:visibility="gone" />
 
     <RelativeLayout
-        android:id="@+id/ll_btn_container"
+        android:id="@+id/btn_container"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:visibility="gone">

@@ -52,7 +52,7 @@ public abstract class BaseTreeActivity<T> extends Activity implements View.OnCli
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_tree);
+        setContentView(R.layout.activity_base_tree);
 
         initView();
 
@@ -60,7 +60,7 @@ public abstract class BaseTreeActivity<T> extends Activity implements View.OnCli
     }
 
     protected void initView() {
-        btnContainer = (RelativeLayout) findViewById(R.id.ll_btn_container);
+        btnContainer = (RelativeLayout) findViewById(R.id.btn_container);
         btnOK = (Button) findViewById(R.id.btn_ok);
         btnCancel = (Button) findViewById(R.id.btn_cancel);
         mTree = (ListView) findViewById(R.id.lst_tree);
